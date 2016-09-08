@@ -1,5 +1,11 @@
 # PA1: Spinning Cube
 
+PA1 will spin the cube in circles, both to the axis and orbit. There are some changes made to src/sharder.cpp file where I moved the shader code into two separate glsl files called vertexShader.glsl and fragmentShader.glsl. I put those files in PA1/shaders folder.
+
+The file names are hard coded which has the path to it. However, according to where the person who is cloning puts it, the modification might be required to the path.
+
+I have already included the command in cmakefile as described below so cmake should work just fine so please follow the build instructions and then use cmake and/or make to run the program as defined below.
+
 # Dependencies, Building, and Running
 
 ## Dependency Instructions
