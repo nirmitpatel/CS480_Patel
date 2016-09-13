@@ -78,26 +78,21 @@ Object::~Object()
   Indices.clear();
 }
 
-void Object::Update(unsigned int dt, int &keystroke)
+void Object::Update(unsigned int dt)
 {
-  if (keystroke == 0) 
-  {
-	angle += dt * M_PI/1000;
-	model = glm::rotate(glm::mat4(1.0f), (angle), glm::vec3(0.0, 1.0, 0.0))*glm::translate(glm::mat4(1.0f), glm::vec3(9.0, 1.0, 0.0))*
-										glm::rotate(glm::mat4(1.0f), (angle), glm::vec3(0.0, 1.0, 0.0));
-  }
-  else if (keystroke == 2)
-  {
-	angle -= dt * M_PI/1000;
-	model = glm::rotate(glm::mat4(1.0f), (angle), glm::vec3(0.0, 1.0, 0.0))*glm::translate(glm::mat4(1.0f), glm::vec3(9.0, 1.0, 0.0))*
-										glm::rotate(glm::mat4(1.0f), (angle), glm::vec3(0.0, 1.0, 0.0));
-  }
-  else if (keystroke == 3) 
-  {
-	angle += dt * M_PI/1000;
-  	model = glm::rotate(glm::mat4(1.0f), (0.0f), glm::vec3(0.0, 1.0, 0.0))*glm::translate(glm::mat4(1.0f), glm::vec3(9.0, 1.0, 0.0))*
-										glm::rotate(glm::mat4(1.0f), (angle), glm::vec3(0.0, 1.0, 0.0));
-  }
+  int keystroke;
+  printf("%d\n", keystroke);
+  Engine *engine = new Engine("Tutorial Window Name", 800, 600);
+  engine->Keyboard(keystroke);
+  printf("%d\n", keystroke);
+
+  angle += dt * M_PI/1000;
+  model = glm::rotate(glm::mat4(1.0f), (angle), glm::vec3(0.0, 1.0, 0.0));/**glm::translate(glm::mat4(1.0f), glm::vec3(9.0, 1.0, 0.0))*
+										glm::rotate(glm::mat4(1.0f), (angle), glm::vec3(0.0, 1.0, 0.0));*/
+  /*
+  if (engine->pause) angle = 0;
+  model = glm::rotate(glm::mat4(1.0f), (angle), glm::vec3(0.0, 1.0, 0.0));/**glm::translate(glm::mat4(1.0f), glm::vec3(9.0, 1.0, 0.0))*
+										glm::rotate(glm::mat4(1.0f), (angle), glm::vec3(0.0, 1.0, 0.0));*/
 }
 
 glm::mat4 Object::GetModel()

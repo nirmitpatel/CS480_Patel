@@ -53,11 +53,7 @@ bool Engine::Initialize()
 void Engine::Run()
 {
   m_running = true;
-  int keystroke = 0;
-  int mouseclick = 0;
-  bool toggle = true;
-  bool unpause = true;
-  bool orbit = true;
+  int keystroke;
 
   while(m_running)
   {
@@ -67,12 +63,11 @@ void Engine::Run()
     // Check the keyboard input
     while(SDL_PollEvent(&m_event) != 0)
     {
-      Keyboard(keystroke, toggle, unpause, orbit);
-      Mouse(mouseclick, toggle, unpause, orbit);
+      Keyboard(keystroke);
     }
 
     // Update and render the graphics
-    m_graphics->Update(m_DT, keystroke);
+    m_graphics->Update(m_DT);
     m_graphics->Render();
 
     // Swap to the Window
@@ -80,8 +75,13 @@ void Engine::Run()
   }
 }
 
-void Engine::Keyboard(int &keystroke, bool &toggle, bool &unpause, bool &orbit)
+void Engine::Keyboard(int &keystroke)
 {
+  //pause = false;
+  //rotate = true;
+  //orbit = true;
+  keystroke = 0;
+
   if(m_event.type == SDL_QUIT)
   {
     m_running = false;
@@ -93,63 +93,15 @@ void Engine::Keyboard(int &keystroke, bool &toggle, bool &unpause, bool &orbit)
     {
       m_running = false;
     }
-    else if (m_event.key.keysym.sym == SDLK_SPACE && unpause == true)
+    else if (m_event.key.keysym.sym == SDLK_SPACE)
     {
       keystroke = 1;
-      unpause = false;
+      printf("SPACE Pressed!\n");
     }
-    else if (m_event.key.keysym.sym == SDLK_SPACE && unpause == false)
+    else if (m_event.key.keysym.sym == SDLK_RALT)
     {
-      keystroke = 0;
-      unpause = true;
-    }
-    else if (m_event.key.keysym.sym == SDLK_RALT && toggle == true && unpause == true)
-    {
-      keystroke = 2;
-      toggle = false;
-    }
-    else if (m_event.key.keysym.sym == SDLK_RALT && toggle == false && unpause == true)
-    {
-      keystroke = 0;
-      toggle = true;
-    }
-    else if (m_event.key.keysym.sym == SDLK_RCTRL && orbit == true && unpause == true)
-    {
-      keystroke = 3;
-      orbit = false;
-    }
-    else if (m_event.key.keysym.sym == SDLK_RCTRL && orbit == false && unpause == true)
-    {
-      keystroke = 0;
-      orbit = true;
-    }
-  }
-}
-
-void Engine::Mouse(int &mouseclick, bool &toggle, bool &unpause, bool &orbit)
-{
-  if (m_event.type == SDL_MOUSEBUTTONDOWN)
-  {
-    // handle mouse click events here
-    if (m_event.button.button == SDL_BUTTON_LEFT && toggle == true && unpause == true)
-    {
-      mouseclick = 2;
-      toggle = false;
-    }
-    else if (m_event.button.button == SDL_BUTTON_LEFT && toggle == false && unpause == true)
-    {
-      mouseclick = 0;
-      toggle = true;
-    }
-    else if (m_event.button.button == SDL_BUTTON_RIGHT && orbit == true && unpause == true)
-    {
-      mouseclick = 3;
-      orbit = false;
-    }
-    else if (m_event.button.button == SDL_BUTTON_RIGHT && orbit == false && unpause == true)
-    {
-      mouseclick = 0;
-      orbit = true;
+      //pause = false;
+      printf("ALT Pressed!\n");
     }
   }
 }

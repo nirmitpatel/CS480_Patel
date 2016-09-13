@@ -107,10 +107,10 @@ bool Graphics::Initialize(int width, int height)
   return true;
 }
 
-void Graphics::Update(unsigned int dt, int &keystroke)
+void Graphics::Update(unsigned int dt)
 {
   // Update the object
-  m_cube->Update(dt, keystroke);
+  m_cube->Update(dt);
 }
 
 void Graphics::Render()
@@ -170,6 +170,4 @@ std::string Graphics::ErrorString(GLenum error)
     return "None";
   }
 }
-
-
 

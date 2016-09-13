@@ -10,7 +10,7 @@ class Object
   public:
     Object();
     ~Object();
-    void Update(unsigned int dt, int &keystroke);
+    void Update(unsigned int dt);
     void Render();
     //bool pause;
     glm::mat4 GetModel();
