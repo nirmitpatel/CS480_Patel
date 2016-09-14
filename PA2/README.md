@@ -1,4 +1,4 @@
-#PA2: Implementing Keyboard and Mosue interactions
+#PA2: Implementing Keyboard and Mosue Interactions
 PA2 takes SPACEBAR, RIGHT ALT, and RIGHT CTRL keys to pause, reverse rotation and stop rotation and continue spin respectively. 
 
 I have updated Keyboard function in engine.cpp so that now we pass int keystroke, bool toggle, bool unpause, and bool orbit. The function checks if the keyboard input is SPACEBAR then it will set unpause to false and return 1 as keystroke, if RIGHT ALT then set toggle to false and return 2 as keystroke and if RIGHT ALT then sets orbit to false and returns 3 as keystroke. Also, I included mouse left to toggle and right to orbit as described above. 
