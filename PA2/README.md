@@ -9,7 +9,7 @@ Everything is else is the same as PA1.
 
 SPACE -> pause/unpause
 RIGHT ALT or LEFT CLICK -> reverse/unreverse 
-RIGHT CTRL or RIGHT CLICK -> stop orbit and continue spinning
+RIGHT CTRL or RIGHT CLICK -> stop/start rotation while orbit is still continuing
 
 To compile, follow the same steps described below.
 

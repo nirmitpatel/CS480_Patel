@@ -95,8 +95,7 @@ void Object::Update(unsigned int dt, int &keystroke, int &mouseclick)
   else if (keystroke == 3 || mouseclick == 3) 
   {
 	angle += dt * M_PI/1000;
-  	model = glm::rotate(glm::mat4(1.0f), (0.0f), glm::vec3(0.0, 1.0, 0.0))*glm::translate(glm::mat4(1.0f), glm::vec3(9.0, 1.0, 0.0))*
-										glm::rotate(glm::mat4(1.0f), (angle), glm::vec3(0.0, 1.0, 0.0));
+  	model = glm::rotate(glm::mat4(1.0f), (angle), glm::vec3(0.0, 1.0, 0.0))*glm::translate(glm::mat4(1.0f), glm::vec3(9.0, 1.0, 0.0));
   }
 }
 
