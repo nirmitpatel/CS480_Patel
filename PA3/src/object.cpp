@@ -61,7 +61,8 @@ Object::Object()
     Indices[i] = Indices[i] - 1;
   }
 
-  angle = 0.0f;
+  planetAngle = 0.0f;
+  moonAngle = 0.0f;
 
   glGenBuffers(1, &VB);
   glBindBuffer(GL_ARRAY_BUFFER, VB);
@@ -80,25 +81,44 @@ Object::~Object()
 
 void Object::Update(unsigned int dt, int &keystroke, int &mouseclick)
 {
+  // if nothing is pressed or pressed same key twice --> normal mode
   if (keystroke == 0 && mouseclick == 0) 
   {
-	angle += dt * M_PI/1000;
-	model = glm::rotate(glm::mat4(1.0f), (angle), glm::vec3(0.0, 1.0, 0.0))*glm::translate(glm::mat4(1.0f), glm::vec3(5.0, 1.0, 0.0))*
-										glm::rotate(glm::mat4(1.0f), (angle), glm::vec3(0.0, 1.0, 0.0));
-	moon = glm::rotate(glm::mat4(1.0f), (angle/8), glm::vec3(0.0, 1.0, 0.0))*glm::translate(glm::mat4(model), glm::vec3(1.0, 0.0, 0.0))*
-										glm::rotate(glm::mat4(1.0f), (angle/8), glm::vec3(0.0, 1.0, 0.0));
+	planetAngle += dt * M_PI/1000;
+	orbitAngle += dt * M_PI/1000;
+	moonAngle += dt * M_PI/500;
   }
+  // if right ALT or left mouse button is pressed --> reverse planet and moon orbit 
   else if (keystroke == 2 || mouseclick == 2)
   {
-	angle -= dt * M_PI/1000;
-	model = glm::rotate(glm::mat4(1.0f), (angle), glm::vec3(0.0, 1.0, 0.0))*glm::translate(glm::mat4(1.0f), glm::vec3(5.0, 1.0, 0.0))*
-										glm::rotate(glm::mat4(1.0f), (angle), glm::vec3(0.0, 1.0, 0.0));
+	planetAngle -= dt * M_PI/1000;
+	orbitAngle -= dt * M_PI/1000;
+	moonAngle -= dt * M_PI/500;
   }
+  // if right CTRL pressed or right mouse button is pressed --> stop spin and continue orbit
   else if (keystroke == 3 || mouseclick == 3) 
   {
-	angle += dt * M_PI/1000;
-  	model = glm::rotate(glm::mat4(1.0f), (angle), glm::vec3(0.0, 1.0, 0.0))*glm::translate(glm::mat4(1.0f), glm::vec3(5.0, 1.0, 0.0));
+	planetAngle += dt * M_PI/1000;
+	moonAngle += dt * M_PI/500;
   }
+  // if DELETE is pressed --> spin planet at last updated position with no orbit
+  else if (keystroke == 4) 
+  {
+	orbitAngle += dt * M_PI/1000;
+	moonAngle += dt * M_PI/500;
+  }
+  // if TAB pressed --> reverse only moon orbit
+  else if (keystroke == 5) 
+  {
+	planetAngle += dt * M_PI/1000;
+	orbitAngle += dt * M_PI/1000;
+	moonAngle -= dt * M_PI/500;
+  }
+
+  model = glm::rotate(glm::mat4(1.0f), (planetAngle), glm::vec3(0.0, 1.0, 0.0))*glm::translate(glm::mat4(1.0f), glm::vec3(5.0, 1.0, 0.0))*
+										glm::rotate(glm::mat4(1.0f), (orbitAngle), glm::vec3(0.0, 1.0, 0.0));
+  moon = glm::rotate(glm::mat4(model), (moonAngle), glm::vec3(0.0, 1.0, 0.0))*glm::translate(glm::mat4(1.0f), glm::vec3(3.0, 0.0, 0.0))*
+										glm::rotate(glm::mat4(1.0f), (moonAngle), glm::vec3(0.0, 1.0, 0.0));
 }
 
 glm::mat4 Object::GetModel()

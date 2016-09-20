@@ -1,3 +1,14 @@
+#PA3: Adding Moon
+In PA3, moon was added which orbits around the planet cube. 
+
+I have updated keyboard functions in engine.cpp so that now the planet stops orbiting when pressed DELETE and moon spins reverse when TAB is pressed. When TAB is pressed and moon spin direction is reversed it almost looks like the moon is not orbitting around the planet, it actually is. The reasion it looks that way is because planet and moon is spinnig in different direction that's why they are cancelling each other out to normal eyes. 
+
+I have added a new model matrix for moon which uses model matrix to get updated value of planet and orbit arounds it. Everything else is the same as described in previous PA. 
+
+DELETE -> stops orbit 
+TAB -> reverse moon orbit
+
+
 #PA2: Implementing Keyboard and Mosue Interactions
 PA2 takes SPACEBAR, RIGHT ALT, and RIGHT CTRL keys to pause, reverse rotation and stop rotation and continue spin respectively. 
 

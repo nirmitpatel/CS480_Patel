@@ -22,7 +22,9 @@ class Object
     std::vector<unsigned int> Indices;
     GLuint VB;
     GLuint IB;
-    float angle;
+    float planetAngle;
+	float orbitAngle;
+	float moonAngle;
 };
 
 #endif /* OBJECT_H */

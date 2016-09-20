@@ -15,7 +15,7 @@ class Engine
     ~Engine();
     bool Initialize();
     void Run();
-    void Keyboard(int &keystroke, bool &toggle, bool &unpause, bool &orbit);
+    void Keyboard(int &keystroke, bool &toggle, bool &unpause, bool &orbit, bool &spin, bool &moon);
     void Mouse(int &mouseclick, bool &toggle, bool &unpause, bool &orbit);
     unsigned int getDT();
     long long GetCurrentTimeMillis();
