@@ -6,7 +6,10 @@ I have updated keyboard functions in engine.cpp so that now the planet stops orb
 I have added a new model matrix for moon which uses model matrix to get updated value of planet and orbit arounds it. Everything else is the same as described in previous PA. 
 
 DELETE -> stops orbit 
+
 TAB -> reverse moon orbit
+
+To compile, follow the same steps described below.
 
 #PA2: Implementing Keyboard and Mosue Interactions
 PA2 takes SPACEBAR, RIGHT ALT, and RIGHT CTRL keys to pause, reverse rotation and stop rotation and continue spin respectively. 
@@ -18,7 +21,9 @@ Also, I updates the parametrs of Update function so now it also takes keystoke a
 Everything is else is the same as PA1.
 
 SPACE -> pause/unpause
+
 RIGHT ALT or LEFT CLICK -> reverse/unreverse 
+
 RIGHT CTRL or RIGHT CLICK -> stop/start rotation while orbit is still continuing
 
 To compile, follow the same steps described below.
