@@ -27,43 +27,6 @@ Object::Object()
   std::vector<GLushort> elements;
   
   load_obj("/home/nirmit/Desktop/CS480/computer-graphics/PA4/src/box.obj", vertices, normals, elements);
-
-  for (int i = 0; i < vertices.size(); i++) {
-	printf ("%f %f %f\n", vertices[i].x, vertices[i].y, vertices[i].z);
-  }
-  for (int i = 0; i < elements.size(); i++) {
-	printf ("%d %d %d\n", elements[i].a, elements[i].b, elements[i].c);
-  }
-
-	//printf("%f\n", vertices);
-/*
-  glEnableVertexAttribArray(attribute_v_coord);
-  // Describe our vertices array to OpenGL (it can't guess its format automatically)
-  glBindBuffer(GL_ARRAY_BUFFER, VB);
-  glVertexAttribPointer(
-    attribute_v_coord,  // attribute
-    4,                  // number of elements per vertex, here (x,y,z,w)
-    GL_FLOAT,           // the type of each element
-    GL_FALSE,           // take our values as-is
-    0,                  // no extra data between each position
-    0                   // offset of first element
-  );
-
-  glEnableVertexAttribArray(attribute_v_normal);
-  glBindBuffer(GL_ARRAY_BUFFER, VB);
-  glVertexAttribPointer(
-    attribute_v_normal, // attribute
-    3,                  // number of elements per vertex, here (x,y,z)
-    GL_FLOAT,           // the type of each element
-    GL_FALSE,           // take our values as-is
-    0,                  // no extra data between each position
-    0                   // offset of first element
-  );
-
-  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IB);
-  int size;  glGetBufferParameteriv(GL_ELEMENT_ARRAY_BUFFER, GL_BUFFER_SIZE, &size);  
-  glDrawElements(GL_TRIANGLES, size/sizeof(GLushort), GL_UNSIGNED_SHORT, 0);
-*/
 /*
   glGenBuffers(1, &VB);
   glBindBuffer(GL_ARRAY_BUFFER, VB);
@@ -73,13 +36,6 @@ Object::Object()
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IB);
   glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * Indices.size(), &Indices[0], GL_STATIC_DRAW);*/
 
-/*	// Read our .obj file
-	std::vector<glm::vec3> vertices;
-	std::vector<glm::vec2> uvs;
-	std::vector<glm::vec3> normals; // Won't be used at the moment.
-	bool res = loadOBJ("/home/nirmit/Desktop/CS480/computer-graphics/PA4/src/box.obj", vertices, uvs, normals);*/
-
-
   glGenBuffers(1, &VB);
   glBindBuffer(GL_ARRAY_BUFFER, VB);
   glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), &vertices[0], GL_STATIC_DRAW);
@@ -87,18 +43,12 @@ Object::Object()
   glGenBuffers(1, &IB);
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IB);
   glBufferData(GL_ELEMENT_ARRAY_BUFFER, elements.size() * sizeof(glm::vec2), &elements[0], GL_STATIC_DRAW);
+  
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IB);
+  int size;
+  glGetBufferParameteriv(GL_ELEMENT_ARRAY_BUFFER, GL_BUFFER_SIZE, &size);
+  glDrawElements(GL_TRIANGLES, size/sizeof(GLushort), GL_UNSIGNED_SHORT, 0);
 
-	// Load it into a VBO
-/*
-	GLuint vertexbuffer;
-	glGenBuffers(1, &vertexbuffer);
-	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), &vertices[0], GL_STATIC_DRAW);
-
-	GLuint uvbuffer;
-	glGenBuffers(1, &uvbuffer);
-	glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
-	glBufferData(GL_ARRAY_BUFFER, uvs.size() * sizeof(glm::vec2), &uvs[0], GL_STATIC_DRAW);*/
 }
 
 Object::~Object()
