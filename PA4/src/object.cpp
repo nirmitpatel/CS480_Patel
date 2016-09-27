@@ -22,11 +22,20 @@ Object::Object()
 
   angle = 0.0f;
   
-  std::vector<glm::vec4> vertices;
+  std::vector<glm::vec3> vertices;
   std::vector<glm::vec3> normals;
   std::vector<GLushort> elements;
   
   load_obj("/home/nirmit/Desktop/CS480/computer-graphics/PA4/src/box.obj", vertices, normals, elements);
+
+  for (int i = 0; i < vertices.size(); i++) {
+	printf ("%f %f %f\n", vertices[i].x, vertices[i].y, vertices[i].z);
+  }
+  for (int i = 0; i < elements.size(); i++) {
+	printf ("%d %d %d\n", elements[i].a, elements[i].b, elements[i].c);
+  }
+
+	//printf("%f\n", vertices);
 /*
   glEnableVertexAttribArray(attribute_v_coord);
   // Describe our vertices array to OpenGL (it can't guess its format automatically)
@@ -98,30 +107,56 @@ Object::~Object()
   Indices.clear();
 }
 
-void Object::load_obj(const char* filename, std::vector<glm::vec4> &vertices, std::vector<glm::vec3> &normals, std::vector<GLushort> &elements)
+void Object::load_obj(const char* filename, std::vector<glm::vec3> &vertices, std::vector<glm::vec3> &normals, std::vector<GLushort> &elements)
 {
-    std::ifstream file(filename);
-    if (!file.good()){
+    char ignore;
+    int ignoreNum;
+    std::ifstream fin;
+
+    fin.open (filename);
+    //std::ifstream file(filename);
+    if (!fin.good()){
     	std::cout << "Couldn't find the file..." << std::endl;
 	exit(1);
     }
 
     std::string line;
-    while (getline(file, line))
+    while (getline(fin, line))
     {
         if (line.substr(0,2) == "v ")
         {
             std::istringstream s(line.substr(2));
-            glm::vec4 v; s >> v.x; s >> v.y; s >> v.z; v.w = 1.0f;
+            glm::vec3 v; s >> v.x; s >> v.y; s >> v.z; //v.w = 1.0f;
+	    //printf("%f %f %f\n", v.x, v.y, v.z);
             vertices.push_back(v);
         }
         else if (line.substr(0,2) == "f ")
         {
             std::istringstream s(line.substr(2));
             GLushort a,b,c;
-            s >> a; s >> b; s >> c;
+	    
+	    s >> a;
+	    s >> ignore;
+            if (ignore == '/') {
+	    	s >> ignore;
+	    	s >> ignoreNum;
+		s >> b;
+	    }
+	    else {
+	    	b = ignore;
+	    }
+	    s >> ignore;
+            if (ignore == '/') {
+	    	s >> ignore;
+	    	s >> ignoreNum;
+		s >> c;
+	    }
+	    else {
+	    	c = ignore;
+	    }
+   	    //printf("%d %d %d\n", a, b, c);
             a--; b--; c--;
-           elements.push_back(a); elements.push_back(b); elements.push_back(c);
+            elements.push_back(a); elements.push_back(b); elements.push_back(c);
         }
         else if (line[0] == '#')
         {
@@ -145,100 +180,7 @@ void Object::load_obj(const char* filename, std::vector<glm::vec4> &vertices, st
         normals[ia] = normals[ib] = normals[ic] = normal;
     }
 }
-
-/*
-bool Object::loadOBJ(
-	const char * path, 
-	std::vector<glm::vec3> & out_vertices, 
-	std::vector<glm::vec2> & out_uvs,
-	std::vector<glm::vec3> & out_normals
-){
-	printf("Loading OBJ file %s...\n", path);
-
-	std::vector<unsigned int> vertexIndices, uvIndices, normalIndices;
-	std::vector<glm::vec3> temp_vertices; 
-	std::vector<glm::vec2> temp_uvs;
-	std::vector<glm::vec3> temp_normals;
-
-
-	FILE * file = fopen(path, "r");
-	if( file == NULL ){
-		printf("Impossible to open the file ! Are you in the right path ? See Tutorial 1 for details\n");
-		getchar();
-		return false;
-	}
-
-	while( 1 ){
-
-		char lineHeader[128];
-		// read the first word of the line
-		int res = fscanf(file, "%s", lineHeader);
-		if (res == EOF)
-			break; // EOF = End Of File. Quit the loop.
-
-		// else : parse lineHeader
-		
-		if ( strcmp( lineHeader, "v" ) == 0 ){
-			glm::vec3 vertex;
-			fscanf(file, "%f %f %f\n", &vertex.x, &vertex.y, &vertex.z );
-			temp_vertices.push_back(vertex);
-		}else if ( strcmp( lineHeader, "vt" ) == 0 ){
-			glm::vec2 uv;
-			fscanf(file, "%f %f\n", &uv.x, &uv.y );
-			uv.y = -uv.y; // Invert V coordinate since we will only use DDS texture, which are inverted. Remove if you want to use TGA or BMP loaders.
-			temp_uvs.push_back(uv);
-		}else if ( strcmp( lineHeader, "vn" ) == 0 ){
-			glm::vec3 normal;
-			fscanf(file, "%f %f %f\n", &normal.x, &normal.y, &normal.z );
-			temp_normals.push_back(normal);
-		}else if ( strcmp( lineHeader, "f" ) == 0 ){
-			std::string vertex1, vertex2, vertex3;
-			unsigned int vertexIndex[3], uvIndex[3], normalIndex[3];
-			int matches = fscanf(file, "%d/%d/%d %d/%d/%d %d/%d/%d\n", &vertexIndex[0], &uvIndex[0], &normalIndex[0], &vertexIndex[1], &uvIndex[1], &normalIndex[1], &vertexIndex[2], &uvIndex[2], &normalIndex[2] );
-			if (matches != 9){
-				printf("File can't be read by our simple parser :-( Try exporting with other options\n");
-				return false;
-			}
-			vertexIndices.push_back(vertexIndex[0]);
-			vertexIndices.push_back(vertexIndex[1]);
-			vertexIndices.push_back(vertexIndex[2]);
-			uvIndices    .push_back(uvIndex[0]);
-			uvIndices    .push_back(uvIndex[1]);
-			uvIndices    .push_back(uvIndex[2]);
-			normalIndices.push_back(normalIndex[0]);
-			normalIndices.push_back(normalIndex[1]);
-			normalIndices.push_back(normalIndex[2]);
-		}else{
-			// Probably a comment, eat up the rest of the line
-			char stupidBuffer[1000];
-			fgets(stupidBuffer, 1000, file);
-		}
-
-	}
-
-	// For each vertex of each triangle
-	for( unsigned int i=0; i<vertexIndices.size(); i++ ){
-
-		// Get the indices of its attributes
-		unsigned int vertexIndex = vertexIndices[i];
-		unsigned int uvIndex = uvIndices[i];
-		unsigned int normalIndex = normalIndices[i];
-		
-		// Get the attributes thanks to the index
-		glm::vec3 vertex = temp_vertices[ vertexIndex-1 ];
-		glm::vec2 uv = temp_uvs[ uvIndex-1 ];
-		glm::vec3 normal = temp_normals[ normalIndex-1 ];
-		
-		// Put the attributes in buffers
-		out_vertices.push_back(vertex);
-		out_uvs     .push_back(uv);
-		out_normals .push_back(normal);
-	
-	}
-
-	return true;
-}
-*/
+					
 void Object::Update(unsigned int dt)
 {
   model = glm::mat4(1.0f);
