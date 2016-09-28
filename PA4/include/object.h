@@ -19,12 +19,12 @@ class Object
     ~Object();
     void Update(unsigned int dt);
     void Render();
-	void load_obj(const char* filename, std::vector<glm::vec3> &vertices, std::vector<glm::vec3> &normals, std::vector<GLushort> &elements);
+	void load_obj(const char* filename, std::vector<glm::vec3> &Vertices, std::vector<glm::vec3> &normals, std::vector<unsigned int> &Indices);
     glm::mat4 GetModel();
 
   private:
     glm::mat4 model;
-    std::vector<Vertex> Vertices;
+    std::vector<glm::vec3> Vertices;
     std::vector<unsigned int> Indices;
     GLuint VB;
     GLuint IB;

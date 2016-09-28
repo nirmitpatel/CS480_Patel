@@ -2,53 +2,27 @@
 
 Object::Object()
 { 
-/*  Vertices = {
-    {{0.0f, 1.0f, 0.0f}, {0.0f, 1.0f, 0.0f}},
-    {{-1.0f, -1.0f, 0.0f}, {1.0f, 0.0f, 0.0f}},
-    {{1.0f, -1.0f, 0.0f}, {0.0f, 0.0f, 1.0f}}
-  };
-
-  Indices = {
-    1, 2, 3
-  };
-
-  // The index works at a 0th index
-  for(unsigned int i = 0; i < Indices.size(); i++)
-  {
-    Indices[i] = Indices[i] - 1;
-  }
-*/
-
-
   angle = 0.0f;
   
-  std::vector<glm::vec3> vertices;
   std::vector<glm::vec3> normals;
-  std::vector<GLushort> elements;
   
-  load_obj("/home/nirmit/Desktop/CS480/computer-graphics/PA4/src/box.obj", vertices, normals, elements);
+  load_obj("/home/nirmit/Desktop/CS480/computer-graphics/PA4/src/box.obj", Vertices, normals, Indices);
 /*
+  printf("\n");
+  for (int i = 0; i < Vertices.size(); i++)
+	printf ("%f %f %f\n", Vertices[i].x, Vertices[i].y, Vertices[i].z);
+ 
+  printf("\n");
+  for (int i = 0; i < Indices.size(); i++)
+	printf ("%d\n", Indices[i]);
+*/
   glGenBuffers(1, &VB);
   glBindBuffer(GL_ARRAY_BUFFER, VB);
   glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * Vertices.size(), &Vertices[0], GL_STATIC_DRAW);
 
   glGenBuffers(1, &IB);
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IB);
-  glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * Indices.size(), &Indices[0], GL_STATIC_DRAW);*/
-
-  glGenBuffers(1, &VB);
-  glBindBuffer(GL_ARRAY_BUFFER, VB);
-  glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), &vertices[0], GL_STATIC_DRAW);
-
-  glGenBuffers(1, &IB);
-  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IB);
-  glBufferData(GL_ELEMENT_ARRAY_BUFFER, elements.size() * sizeof(glm::vec2), &elements[0], GL_STATIC_DRAW);
-  
-  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IB);
-  int size;
-  glGetBufferParameteriv(GL_ELEMENT_ARRAY_BUFFER, GL_BUFFER_SIZE, &size);
-  glDrawElements(GL_TRIANGLES, size/sizeof(GLushort), GL_UNSIGNED_SHORT, 0);
-
+  glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * Indices.size(), &Indices[0], GL_STATIC_DRAW);
 }
 
 Object::~Object()
@@ -57,14 +31,13 @@ Object::~Object()
   Indices.clear();
 }
 
-void Object::load_obj(const char* filename, std::vector<glm::vec3> &vertices, std::vector<glm::vec3> &normals, std::vector<GLushort> &elements)
+void Object::load_obj(const char* filename, std::vector<glm::vec3> &Vertices, std::vector<glm::vec3> &normals, std::vector<unsigned int> &Indices)
 {
     char ignore;
     int ignoreNum;
     std::ifstream fin;
 
     fin.open (filename);
-    //std::ifstream file(filename);
     if (!fin.good()){
     	std::cout << "Couldn't find the file..." << std::endl;
 	exit(1);
@@ -76,14 +49,13 @@ void Object::load_obj(const char* filename, std::vector<glm::vec3> &vertices, st
         if (line.substr(0,2) == "v ")
         {
             std::istringstream s(line.substr(2));
-            glm::vec3 v; s >> v.x; s >> v.y; s >> v.z; //v.w = 1.0f;
-	    //printf("%f %f %f\n", v.x, v.y, v.z);
-            vertices.push_back(v);
+            glm::vec3 v; s >> v.x; s >> v.y; s >> v.z;
+            Vertices.push_back(v);
         }
         else if (line.substr(0,2) == "f ")
         {
             std::istringstream s(line.substr(2));
-            GLushort a,b,c;
+            GLuint a,b,c;
 	    
 	    s >> a;
 	    s >> ignore;
@@ -106,7 +78,7 @@ void Object::load_obj(const char* filename, std::vector<glm::vec3> &vertices, st
 	    }
    	    //printf("%d %d %d\n", a, b, c);
             a--; b--; c--;
-            elements.push_back(a); elements.push_back(b); elements.push_back(c);
+            Indices.push_back(a); Indices.push_back(b); Indices.push_back(c);
         }
         else if (line[0] == '#')
         {
@@ -118,15 +90,15 @@ void Object::load_obj(const char* filename, std::vector<glm::vec3> &vertices, st
         }
     }
 
-    normals.resize(vertices.size(), glm::vec3(0.0, 0.0, 0.0));
-    for (int i = 0; i < elements.size(); i+=3)
+    normals.resize(Vertices.size(), glm::vec3(0.0, 0.0, 0.0));
+    for (int i = 0; i < Indices.size(); i+=3)
     {
-        GLushort ia = elements[i];
-        GLushort ib = elements[i+1];
-        GLushort ic = elements[i+2];
+        GLuint ia = Indices[i];
+        GLuint ib = Indices[i+1];
+        GLuint ic = Indices[i+2];
         glm::vec3 normal = glm::normalize(glm::cross(
-        glm::vec3(vertices[ib]) - glm::vec3(vertices[ia]),
-        glm::vec3(vertices[ic]) - glm::vec3(vertices[ia])));
+        glm::vec3(Vertices[ib]) - glm::vec3(Vertices[ia]),
+        glm::vec3(Vertices[ic]) - glm::vec3(Vertices[ia])));
         normals[ia] = normals[ib] = normals[ic] = normal;
     }
 }
@@ -157,4 +129,16 @@ void Object::Render()
   glDisableVertexAttribArray(0);
   glDisableVertexAttribArray(1);
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
