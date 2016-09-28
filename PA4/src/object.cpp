@@ -7,15 +7,7 @@ Object::Object()
   std::vector<glm::vec3> normals;
   
   load_obj("/home/nirmit/Desktop/CS480/computer-graphics/PA4/src/box.obj", Vertices, normals, Indices);
-/*
-  printf("\n");
-  for (int i = 0; i < Vertices.size(); i++)
-	printf ("%f %f %f\n", Vertices[i].x, Vertices[i].y, Vertices[i].z);
- 
-  printf("\n");
-  for (int i = 0; i < Indices.size(); i++)
-	printf ("%d\n", Indices[i]);
-*/
+
   glGenBuffers(1, &VB);
   glBindBuffer(GL_ARRAY_BUFFER, VB);
   glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * Vertices.size(), &Vertices[0], GL_STATIC_DRAW);
