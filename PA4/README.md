@@ -1,13 +1,13 @@
 #PA4: Model Loading
 In this assignment, I have created a box in blender and created an obj file which is included in src folder. I have created a function called load_obj which opens and file, looks for v and f and put them in vertex or stores as unsigned int. The function is called in Object constructor.
 
-I had to hard code the file path for obj file and vertex and fragment shader files because of some issues but it will definitely be fixed first thing before the next assignment is due. 
+You have to hard code the location for obj file as I couldn't fix the problem of not reading it right. It will be fixed ASAP. 
 
 When the object is shown on the screen, it looks weird. I couldn't figure out the reason for it. File is being read correctly as I have tested it several different times in both load_obj function and Object constructor. 
 
 I have attemted to do EXTRA CREDIT by giving it color. However the object is, it still has some color in it. 
 
-I tried dragon.obj file but it gives me segfault and I am assuming it is becaise of the memory problem. 
+If it is a small obj file, i.e. box.obj of which picture is given on the website, it works perfectly. I tried dragon.obj file but it gives me segfault and I am assuming it is becaise of the memory problem. 
 
 To compile, follow the same steps described below.
 
